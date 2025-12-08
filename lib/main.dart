@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_lists/classes/todo.dart';
 import 'package:todo_lists/widgets/todo-card.dart';
 void main() {
   runApp(const MyApp());
@@ -6,7 +7,6 @@ void main() {
  
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
- 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,6 +17,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
+List allTasks = [
+  Todo(title: "title 1", finished: false, onTap: (){}),
+  Todo(title: "title 2", finished: true, onTap: (){}),
+  Todo(title: "title 3", finished: false, onTap: (){}),
+];
+
 welcom() {
   return Scaffold(
     backgroundColor: Color(0xFFE1E0E3),
@@ -26,25 +32,17 @@ welcom() {
       backgroundColor: Color.fromARGB(255, 13, 1, 30),
     ),
     body: Center(
-      child: FractionallySizedBox( // To make the child take 90% of the width
+      child: FractionallySizedBox( 
+        // To make the child take 90% of the width
         widthFactor: 0.9,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TodoCard(
-              title: 'remove',
-              isCompleted: false,
-              onTap: () {
-                // Handle tap
-              },
-            ),
-            TodoCard(
-              title: 'add',
-              isCompleted: true,
-              onTap: () {
-                // Handle tap
-              },
-            ),
+            ...allTasks.map( (todo) => TodoCard(
+              title: todo.title,
+              isCompleted: todo.finished,
+              onTap: todo.onTap,
+            ))
             ],
         )
       )

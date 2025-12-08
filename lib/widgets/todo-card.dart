@@ -6,11 +6,11 @@ class TodoCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const TodoCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.isCompleted,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
