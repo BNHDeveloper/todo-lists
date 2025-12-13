@@ -5,7 +5,8 @@ import 'package:todo_lists/widgets/todo-card.dart';
 void main() {
   runApp(const MyApp());
 }
-// 1 36 50
+
+// 2 15 01 PM
 List allTasks = [
   Todo(title: "title 1", finished: false, onTap: () {}),
   Todo(title: "title 2", finished: true, onTap: () {}),
@@ -14,21 +15,39 @@ List allTasks = [
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true),
-      home: const HomeScreen(), // proper widget
+      home: HomeScreen(), // proper widget
     );
   }
 }
 
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
 //  HomeScreen widget
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-  
+class _HomeScreenState extends State<HomeScreen>  {
+  // const HomeScreen({Key? key}) : super(key: key);
+  final myController = TextEditingController();
+  String todoTask = "";
+  addTask() {
+    setState(() {
+      allTasks.add(
+        Todo(
+          title: myController.text,
+          finished: false,
+          onTap: () {},
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,35 +56,37 @@ class HomeScreen extends StatelessWidget {
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
           showModalBottomSheet(
-            isScrollControlled: bool.fromEnvironment( 'scrollControlled', defaultValue: true),
+            isScrollControlled: bool.fromEnvironment(
+              'scrollControlled',
+              defaultValue: true,
+            ),
             context: context,
             builder: (BuildContext context) {
               return Container(
                 height: double.infinity,
                 color: Colors.white,
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 40),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: TextField(
-                          maxLength: 100,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Task Title',
-                          ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        maxLength: 100,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Task Title',
                         ),
+                        controller: myController,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Logic to add the new task
-                          Navigator.pop(context);
-                        },
-                        child: Text('Add Task'),
-                      ),
-                    ],
-                  ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        addTask();
+                        Navigator.pop(context);
+                      },
+                      child: Text('Add Task'),
+                    ),
+                  ],
                 ),
               );
             },
@@ -85,8 +106,8 @@ class HomeScreen extends StatelessWidget {
         child: FractionallySizedBox(
           widthFactor: 0.9,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: 40),
               ...allTasks.map(
                 (todo) => TodoCard(
                   title: todo.title,
