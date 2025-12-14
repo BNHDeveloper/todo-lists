@@ -55,45 +55,51 @@ class _HomeScreenState extends State<HomeScreen>  {
         backgroundColor: Color.fromRGBO(38, 37, 37, 1),
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
-          showModalBottomSheet(
-            isScrollControlled: bool.fromEnvironment(
-              'scrollControlled',
-              defaultValue: true,
-            ),
+          showDialog(
+            // isScrollControlled: bool.fromEnvironment(
+            //   'scrollControlled',
+            //   defaultValue: true,
+            // ),
             context: context,
             builder: (BuildContext context) {
-              return Container(
-                height: double.infinity,
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    SizedBox(height: 40),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        maxLength: 100,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Task Title',
+              return Dialog(
+                shadowColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
+                  height: 250,
+                  // color: Colors.white,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 40),
+                      Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: TextField(
+                          maxLength: 100,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Task Title',
+                          ),
+                          controller: myController,
                         ),
-                        controller: myController,
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        addTask();
-                        Navigator.pop(context);
-                      },
-                      child: Text('Add Task'),
-                    ),
-                  ],
+                      ElevatedButton(
+                        onPressed: () {
+                          addTask();
+                          Navigator.pop(context);
+                        },
+                        child: Text('Add Task'),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
           );
         },
       ),
-      backgroundColor: Color(0xFFE1E0E3),
+      backgroundColor: Color(0xFFEDECF0),
       appBar: AppBar(
         title: const Text(
           'ToDo',
