@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:todo_lists/classes/todo.dart';
 import 'package:todo_lists/widgets/todo-card.dart';
+import 'package:todo_lists/widgets/counter.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-// 2 15 01 PM
+// 3 00 50 AM
 List allTasks = [
   Todo(title: "title 1", finished: false, onTap: () {}),
   Todo(title: "title 2", finished: true, onTap: () {}),
+  Todo(title: "title 0", finished: true, onTap: () {}),
   Todo(title: "title 3", finished: false, onTap: () {}),
 ];
 
@@ -32,74 +34,74 @@ class HomeScreen extends StatefulWidget {
 }
 
 //  HomeScreen widget
-class _HomeScreenState extends State<HomeScreen>  {
+class _HomeScreenState extends State<HomeScreen> {
   // const HomeScreen({Key? key}) : super(key: key);
   final myController = TextEditingController();
   String todoTask = "";
   addTask() {
     setState(() {
       allTasks.add(
-        Todo(
-          title: myController.text,
-          finished: false,
-          onTap: () {},
-        ),
+        Todo(title: myController.text, finished: false, onTap: () {}),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    int calculateTask() {
+      int tasks = 0;
+      allTasks.forEach((ele){
+        if (ele.finished) {
+          tasks++;
+        }}
+      );
+      return tasks;
+    }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromRGBO(38, 37, 37, 1),
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
-          showDialog(
-            // isScrollControlled: bool.fromEnvironment(
-            //   'scrollControlled',
-            //   defaultValue: true,
-            // ),
+          showModalBottomSheet(
+            isScrollControlled: bool.fromEnvironment(
+              'scrollControlled',
+              defaultValue: true,
+            ),
             context: context,
             builder: (BuildContext context) {
-              return Dialog(
-                shadowColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Container(
-                  height: 250,
-                  // color: Colors.white,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 40),
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: TextField(
-                          maxLength: 100,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Task Title',
-                          ),
-                          controller: myController,
+              return Container(
+                height: 300,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        maxLength: 100,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Task Title',
                         ),
+                        controller: myController,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          addTask();
-                          Navigator.pop(context);
-                        },
-                        child: Text('Add Task'),
-                      ),
-                    ],
-                  ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        addTask();
+                        Navigator.pop(context);
+                      },
+                      child: Text('Add Task'),
+                    ),
+                  ],
                 ),
               );
             },
           );
         },
       ),
-      backgroundColor: Color(0xFFEDECF0),
+      backgroundColor: Color(0xFFE1E0E3),
       appBar: AppBar(
         title: const Text(
           'ToDo',
@@ -114,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen>  {
           child: Column(
             children: [
               SizedBox(height: 40),
+              Counter(complited :calculateTask(),tasks: allTasks.length),
               ...allTasks.map(
                 (todo) => TodoCard(
                   title: todo.title,
