@@ -7,11 +7,13 @@ void main() {
   runApp(const MyApp());
 }
 
-// 3 00 50 AM
+// [3,38,33]
 List allTasks = [
   Todo(title: "title 1", finished: false, onTap: () {}),
   Todo(title: "title 2", finished: true, onTap: () {}),
   Todo(title: "title 0", finished: true, onTap: () {}),
+  Todo(title: "title 09", finished: true, onTap: () {}),
+  Todo(title: "title 10", finished: true, onTap: () {}),
   Todo(title: "title 3", finished: false, onTap: () {}),
 ];
 
@@ -50,11 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     int calculateTask() {
       int tasks = 0;
-      allTasks.forEach((ele){
+      allTasks.forEach((ele) {
         if (ele.finished) {
           tasks++;
-        }}
-      );
+        }
+      });
       return tasks;
     }
 
@@ -115,13 +117,21 @@ class _HomeScreenState extends State<HomeScreen> {
           widthFactor: 0.9,
           child: Column(
             children: [
-              SizedBox(height: 40),
-              Counter(complited :calculateTask(),tasks: allTasks.length),
-              ...allTasks.map(
-                (todo) => TodoCard(
-                  title: todo.title,
-                  isCompleted: todo.finished,
-                  onTap: todo.onTap,
+              Counter(
+                tasks: allTasks.length,
+                complited: calculateTask(),
+              ),
+              SizedBox(
+                height: 550,
+                child: ListView.builder(
+                  itemCount: allTasks.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return TodoCard(
+                      title: allTasks[index].title,
+                      isCompleted: allTasks[index].finished,
+                      onTap: () {},
+                    );
+                  },
                 ),
               ),
             ],
