@@ -9,12 +9,9 @@ void main() {
 
 // [3,38,33]
 List allTasks = [
-  Todo(title: "title 1", finished: false, onTap: () {}),
-  Todo(title: "title 2", finished: true, onTap: () {}),
-  Todo(title: "title 0", finished: true, onTap: () {}),
-  Todo(title: "title 09", finished: true, onTap: () {}),
-  Todo(title: "title 10", finished: true, onTap: () {}),
-  Todo(title: "title 3", finished: false, onTap: () {}),
+  Todo(title: "title 1", finished: false),
+  Todo(title: "title 2", finished: true),
+  Todo(title: "title 0", finished: true),
 ];
 
 class MyApp extends StatelessWidget {
@@ -42,12 +39,24 @@ class _HomeScreenState extends State<HomeScreen> {
   String todoTask = "";
   addTask() {
     setState(() {
-      allTasks.add(
-        Todo(title: myController.text, finished: false, onTap: () {}),
-      );
+      allTasks.add(Todo(title: myController.text, finished: false));
     });
   }
-
+  chngeStatus(int taskIndex) {
+    setState(() {
+      allTasks[taskIndex].finished = !allTasks[taskIndex].finished;
+    });
+  }
+  deletTask(int taskIndex) {
+    setState(() {
+      allTasks.removeAt(taskIndex);
+    });
+  }
+  deleteAll(){
+    setState(() {
+      allTasks.removeRange(0,allTasks.length);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     int calculateTask() {
@@ -107,20 +116,27 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text(
           'ToDo',
-          style: TextStyle(fontSize: 24, color: Colors.white),
+          style: TextStyle(fontSize: 30, color: Colors.white),
         ),
-        centerTitle: true,
+        // centerTitle: true,
         backgroundColor: Color.fromARGB(255, 13, 1, 30),
+        actions: [
+          IconButton(
+            onPressed: () {
+              deleteAll();
+            },
+            icon: Icon(Icons.delete_forever),
+            iconSize: 37,
+            color: Color.fromARGB(255, 217, 217, 217),
+          )
+        ],
       ),
       body: Center(
         child: FractionallySizedBox(
           widthFactor: 0.9,
           child: Column(
             children: [
-              Counter(
-                tasks: allTasks.length,
-                complited: calculateTask(),
-              ),
+              Counter(tasks: allTasks.length, complited: calculateTask()),
               SizedBox(
                 height: 550,
                 child: ListView.builder(
@@ -128,8 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return TodoCard(
                       title: allTasks[index].title,
-                      isCompleted: allTasks[index].finished,
-                      onTap: () {},
+                      finished: allTasks[index].finished,
+                      changeStatus: chngeStatus,
+                      index: index,
+                      delete:deletTask,
                     );
                   },
                 ),
